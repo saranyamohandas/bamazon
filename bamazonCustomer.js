@@ -81,7 +81,7 @@ function checkQuantity(id,userqty,availableqty,price){
         var query = connection.query("UPDATE PRODUCTS SET  ? WHERE ?",[{STOCK_QUANTITY:updatedQty},{item_id:id}],function(err,res){
             if(err) throw err;
             console.log(res.affectedRows + " products updated!\n");
-            console.log("Your total purchase amout is $" + totalPrice + ".\n" );
+            console.log("Your total purchase amount is $" + totalPrice + ".\n" );
             
         })
         console.log(query.sql + "\n");
