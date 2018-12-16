@@ -73,6 +73,7 @@ function viewProducts(){
         console.log(table.toString());
     }
                                 )
+    connection.end();
 }
 
 function viewLowInv(){
@@ -86,25 +87,64 @@ function viewLowInv(){
     }
                      
                     )
+         connection.end();
     }
 
 function addToInv(){
-    inquirer.prompt([{
+    inquirer.prompt([
+        {
         type: "input",
         message : "Please enter the id of the product to update inventory:",
         name : "userInpId"
-    },{
+      },
+        {
         type: "input",
         message : "Please enter the quanity for update:",
         name : "userInpQty"
-    }
+      }
     ]).then(function(userInp){
-           var query = connection.query("UPDATE PRODUCTS SET STOCK_QUANTITY = " + userInp.STOCK_QUANTITY" + WHERE ID =" + userInp.userInpQty)
-        
+           var query = connection.query("UPDATE PRODUCTS SET STOCK_QUANTITY = " + userInp.userInpQty + " WHERE ITEM_ID =" + userInp.userInpId,function(err,rows){
+               if(err) throw err;
+               console.log(rows.affectedRows + " products updated!\n ");
+               console.log(query.sql);
+               }
+                                       )
+      connection.end();     
     })
- 
-    
-    
+}
+
+function addNewProd(){
+    inquirer.prompt([
+        {
+        type: "input",
+        message : "Enter the name of the new product:",
+        name : "userInpProd"
+      },
+        {
+        type: "input",
+        message : "Enter the department for the new product: ",
+        name : "userInpDept"
+      },
+        {
+        type: "input",
+        message : "Enter the price for the new product: ",
+        name : "userInpPrice"
+      },
+        {
+        type: "input",
+        message : "Enter the available stock quantity: ",
+        name : "userInpQty"
+      }
+    ]).then(function(userInp){
+           var query = connection.query("INSERT INTO PRODUCTS(product_name,department_name,price,stock_quantity) VALUES (?,?,?,?)", [userInp.userInpProd,userInp.userInpDept,userInp.userInpPrice,userInp.userInpQty] ,function(err,rows){
+               if(err) throw err;
+               console.log(rows.affectedRows + " products updated!\n ");
+               
+               }
+        )
+           console.log(query.sql);
+           connection.end();
+    })
 }
 
 
