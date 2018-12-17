@@ -2,11 +2,6 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table");
 
-//instantiate table
-var table = new Table({
-    head : ["Item_id","Product","department","Price","quantity"]
-});
-
 var connection = mysql.createConnection({
     host : "localhost",
     port : 3306,
@@ -24,10 +19,10 @@ connection.connect(function(err){
 function getManagerChoice(){
     inquirer.prompt([{
         type: "list",
-        choices:["View products for sale","View low inventory","Add to inventory","Add new product"],
+        choices:["View products for sale","View low inventory","Add to inventory","Add new product","Quit"],
         name : "managerInp"
     }]).then(function(UserInp){
-        console.log(UserInp.managerInp);
+        //console.log(UserInp.managerInp);
         switch (UserInp.managerInp){
             case "View products for sale":
                 viewProducts();
@@ -41,6 +36,9 @@ function getManagerChoice(){
             case "Add new product":
                 addNewProd();
                 break;
+            case "Quit":
+                quitApp();
+                
         }
     });
 };
@@ -49,28 +47,37 @@ function viewProducts(){
     var query = connection.query("SELECT * FROM PRODUCTS",function(err,rows){
         if(err) throw err;
         console.log(rows);
+        //instantiate table
+        var table = new Table({
+    head : ["Item_id","Product","department","Price","quantity"]
+});
         rows.forEach(function(data){
             table.push([data.item_id,data.product_name,data.department_name,data.price,data.stock_quantity]);
         });
         console.log("\n**** Products available for sale  ****\n");
         console.log(table.toString());
+        continueApp();
     }
                                 )
-    quitApp();
+    
 }
 
 function viewLowInv(){
     var query = connection.query("SELECT * FROM PRODUCTS WHERE stock_quantity < 5 ",function(err,rows){
         if(err) throw err;
+        //instantiate table
+        var table = new Table({
+    head : ["Item_id","Product","department","Price","quantity"]
+});
         rows.forEach(function(data){
           table.push([data.item_id,data.product_name,data.department_name,data.price,data.stock_quantity]);  
         })
         console.log("\n**** Products with low inventory ****\n");
         console.log(table.toString());
+        continueApp();
     }
-                     
-                    )
-         quitApp();
+                                )
+         
     }
 
 function addToInv(){
@@ -90,10 +97,11 @@ function addToInv(){
                if(err) throw err;
                console.log(rows.affectedRows + " products updated!\n ");
                console.log(query.sql);
+               continueApp()
                }
                                        )
     })
-    quitApp()
+    
 }
 
 function addNewProd(){
@@ -122,16 +130,32 @@ function addNewProd(){
            var query = connection.query("INSERT INTO PRODUCTS(product_name,department_name,price,stock_quantity) VALUES (?,?,?,?)", [userInp.userInpProd,userInp.userInpDept,userInp.userInpPrice,userInp.userInpQty] ,function(err,rows){
                if(err) throw err;
                console.log(rows.affectedRows + " products updated!\n ");
-               
+               console.log(query.sql);
+               continueApp();
                }
         )
-           console.log(query.sql);
     })
-    quitApp();
+    
+}
+
+function continueApp(){
+    inquirer.prompt([{
+        type:"list",
+        choices:["Continue with application","Quit"],
+        name:"userInp"
+    }]).then(function(res){
+        switch (res.userInp){
+            case "Continue with application": 
+                getManagerChoice();
+                break;
+            case "Quit":
+                quitApp();
+        }
+    })
+    
 }
 
 function quitApp(){
-    console.log("Thanks for shopping!");
     process.exit(0);
 }
 

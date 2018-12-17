@@ -29,5 +29,7 @@ CREATE TABLE departments(
         over_head_costs DECIMAL(10,2)
 );
 ALTER TABLE products ADD COLUMN product_sales INT NOT NULL;
+ALTER TABLE products MODIFY COLUMN product_sales INT NULL;
+
 SELECT * FROM products;
 select * from products where stock_quantity < 5;

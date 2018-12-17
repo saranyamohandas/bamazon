@@ -2,11 +2,6 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table");
 
-//instantiate table
-var table = new Table({
-    head : ["Item_id","Product","Price"]
-});
-
 var connection = mysql.createConnection({
     host : "localhost",
     port : 3306,
@@ -26,6 +21,10 @@ connection.connect(function(err){
 function selectQuery(){
     var query = connection.query("SELECT * FROM PRODUCTS",function(err,res){
         if(err) throw err;
+        //instantiate table
+        var table = new Table({
+            head : ["Item_id","Product","Price"]
+        });
         res.forEach(function(data){
             table.push([data.item_id,data.product_name,
                         data.price]);
@@ -81,21 +80,37 @@ function checkQuantity(id,userqty,availableqty,price){
         console.log("Sorry the order cannot be placed due to insufficient quantity!\n");
         
     } else {
-        var updatedQty = availableqty - userqty;
+        var updateQty = availableqty - userqty;
         var totalPrice = userqty * price;
-        console.log("updatedQty",updatedQty);
-        var query = connection.query("UPDATE PRODUCTS SET  ? WHERE ?",[{STOCK_QUANTITY:updatedQty},{item_id:id}],function(err,res){
+        console.log("updateQty",updateQty);
+        var query = connection.query("UPDATE PRODUCTS SET  ?,? WHERE ?",[{STOCK_QUANTITY:updateQty},{PRODUCT_SALES: totalPrice}, {item_id:id}],function(err,res){
             if(err) throw err;
             console.log(res.affectedRows + " product updated!\n");
             console.log("Your total purchase amount is $" + totalPrice + ".\n" );
-            
+            console.log(query.sql + "\n");
+            continueApp();        
         })
-        console.log(query.sql + "\n");
-    }
-    quitApp();
+        }
+}
+
+function continueApp(){
+    inquirer.prompt([{
+        type:"list",
+        choices:["Continue shopping","Quit"],
+        name:"userInp"
+    }]).then(function(res){
+        switch (res.userInp){
+            case "Continue shopping": 
+                selectQuery();
+                break;
+            case "Quit":
+                quitApp();
+        }
+    })
+    
 }
 
 function quitApp(){
-    console.log("Thanks for shopping!");
+    console.log("\n Thanks for shopping!");
     process.exit(0);
 }
