@@ -43,13 +43,23 @@ function askUser(){
     inquirer.prompt([
         {
          type: "input",
-         message : "Please enter the ID of the product you would like to purchase?",
-         name : "prodId"
+         message : "Please enter the ID of the product you would like to purchase?[Enter Q to quit]",
+         name : "prodId",
+         validate : function(val){
+             if(val.toUpperCase() == "Q") {
+                 process.exit(0);
+         } else {return true}
+        }
         },
         {
          type: "input",
-         message : "Please enter the number of quantity?",
-         name : "prodQuantity"
+         message : "Please enter the number of quantity?[Enter Q to quit]",
+         name : "prodQuantity",
+         validate : function(val){
+             if(val.toUpperCase() == "Q") {
+                 process.exit(0);
+             } else {return true};
+         }
             
         }
     ]).then(function(userInp){
@@ -58,10 +68,6 @@ function askUser(){
             console.log("qty: ",data[0].STOCK_QUANTITY);
             console.log("price: ",data[0].PRICE + "\n");
             checkQuantity(userInp.prodId,userInp.prodQuantity,data[0].STOCK_QUANTITY,data[0].PRICE)
-//            if(!data[0].STOCK_QUANTITY){
-//                console.log("Sorry the i ")
-//            }
-            
         }
                                     ) 
         console.log(query.sql + "\n");
@@ -85,12 +91,11 @@ function checkQuantity(id,userqty,availableqty,price){
             
         })
         console.log(query.sql + "\n");
-        
     }
-    
-    
-    
-    
-    
-    
+    quitApp();
+}
+
+function quitApp(){
+    console.log("Thanks for shopping!");
+    process.exit(0);
 }

@@ -23,6 +23,11 @@ INSERT INTO products(product_name,department_name,price,stock_quantity) VALUES (
                             ("Guitar","Musical Instruments",89.99,15);
 								
 
-
+CREATE TABLE departments(
+		department_id INT AUTO_INCREMENT PRIMARY KEY,
+        department_name VARCHAR(20) NOT NULL,
+        over_head_costs DECIMAL(10,2)
+);
+ALTER TABLE products ADD COLUMN product_sales INT NOT NULL;
 SELECT * FROM products;
 select * from products where stock_quantity < 5;

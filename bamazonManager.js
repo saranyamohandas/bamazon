@@ -21,23 +21,6 @@ connection.connect(function(err){
 });
 
 
-
-
-//function selectQuery(){
-//    var query = connection.query("SELECT * FROM PRODUCTS",function(err,res){
-//        if(err) throw err;
-//        res.forEach(function(data){
-//            table.push([data.item_id,data.product_name,
-//                        data.price]);
-//        })
-//        console.log("\n**** Below products are available for sale ****\n");
-//        console.log(table.toString());
-//        getManagerChoice();
-//        
-//    }
-//                                );
-//};
-
 function getManagerChoice(){
     inquirer.prompt([{
         type: "list",
@@ -73,7 +56,7 @@ function viewProducts(){
         console.log(table.toString());
     }
                                 )
-    connection.end();
+    quitApp();
 }
 
 function viewLowInv(){
@@ -87,7 +70,7 @@ function viewLowInv(){
     }
                      
                     )
-         connection.end();
+         quitApp();
     }
 
 function addToInv(){
@@ -109,8 +92,8 @@ function addToInv(){
                console.log(query.sql);
                }
                                        )
-      connection.end();     
     })
+    quitApp()
 }
 
 function addNewProd(){
@@ -143,8 +126,13 @@ function addNewProd(){
                }
         )
            console.log(query.sql);
-           connection.end();
     })
+    quitApp();
+}
+
+function quitApp(){
+    console.log("Thanks for shopping!");
+    process.exit(0);
 }
 
 
