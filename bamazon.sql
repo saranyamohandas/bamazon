@@ -28,8 +28,23 @@ CREATE TABLE departments(
         department_name VARCHAR(20) NOT NULL,
         over_head_costs DECIMAL(10,2)
 );
+UPDATE products SET department_name = "Home & Kitchen" WHERE product_name = "Blender";
 ALTER TABLE products ADD COLUMN product_sales INT NOT NULL;
-ALTER TABLE products MODIFY COLUMN product_sales INT NULL;
+ALTER TABLE products MODIFY COLUMN department_name VARCHAR(100);
+INSERT INTO departments(department_name,over_head_costs) VALUES("Cell phones",1000),("Electronics",500),
+                                                    ("Camera & Accesories",5000),("Home & Kitchen",2000);
+
+
+select * from products where stock_quantity < 5;
 
 SELECT * FROM products;
-select * from products where stock_quantity < 5;
+SELECT * FROM departments;
+
+select d.department_id,d.department_name,d.over_head_costs, p. product_sales,
+d.over_head_costs - p. product_sales AS total_profit from departments d INNER JOIN products p 
+						on d.department_name = p.department_name ;
+
+select d.department_id,d.department_name,d.over_head_costs, sum(p. product_sales) AS product_sales,
+ product_sales - d.over_head_costs AS total_profit from departments d INNER JOIN products p 
+						on d.department_name = p.department_name GROUP BY d.department_name ;
+
