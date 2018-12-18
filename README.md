@@ -27,7 +27,7 @@
 * Below are the snapshots of the application -
 
 
-  ![bamazoncustomer](https://raw.githubusercontent.com/saranyamohandas/bamazon/master/images/bamazonManager1.png | width=75)
+  ![bamazoncustomer](https://raw.githubusercontent.com/saranyamohandas/bamazon/master/images/bamazonManager1.png | width=50)
 
 ![bamazoncust2](https://raw.githubusercontent.com/saranyamohandas/bamazon/master/images/bamazoncust3.png)
 
