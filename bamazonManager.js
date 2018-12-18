@@ -46,7 +46,7 @@ function getManagerChoice(){
 function viewProducts(){
     var query = connection.query("SELECT * FROM PRODUCTS",function(err,rows){
         if(err) throw err;
-        console.log(rows);
+        
         //instantiate table
         var table = new Table({
     head : ["Item_id","Product","department","Price","quantity"]

@@ -78,6 +78,7 @@ function askUser(){
 function checkQuantity(id,userqty,availableqty,price){
     if(availableqty < userqty){
         console.log("Sorry the order cannot be placed due to insufficient quantity!\n");
+        continueApp();
         
     } else {
         var updateQty = availableqty - userqty;
